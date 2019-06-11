@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ARImport</title>
+</head>
+<body>
+    <div class="navbar">
+        <nav>
+            <div class="nav-wrapper">
+                <a class="brand-logo center" href="#">ARImport <i class="material-icons">account_balance</i></a>
+            </div>
+        </nav>
+    </div>    
+    <div class="container">
+        <h4>Import CSV</h4>
+        <hr>
+        <p>Please select which file to upload then click the submit button below.</p>
+        <br>
+        <form action="#" method="post"> <!-- POST Form for CSV files -->
+            <div class="file-field input-field">
+                <div class="btn">
+                    <span>FILE</span>
+                    <input type="file" accept=".csv" multiple>
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text" placeholder="Upload one or more files">
+                </div>
+            </div>
+            <button class="btn-large waves-effect waves-light" type="submit" style="left: 45%">Submit <i class="material-icons right">send</i></button>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
