@@ -1,12 +1,15 @@
+/*Package 'output' contains interface for logging errors to text file.
+ */
 package output
 
 import (
+	"fmt"
 	"log"
 	"os"
-	"fmt"
 )
 
 var Log *log.Logger
+
 var file *os.File
 
 func init() {
@@ -15,9 +18,10 @@ func init() {
 		fmt.Printf("!!! Log File Error: %v !!!", err)
 	}
 
-	Log = log.New(file, "Log: ", log.LstdFlags)
+	Log = log.New(file, "Error: ", log.LstdFlags)
 }
 
+//Close flushes data and releases file resource.
 func Close() {
 	file.Sync()
 	file.Close()

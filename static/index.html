@@ -13,7 +13,7 @@
     <div class="navbar">
         <nav>
             <div class="nav-wrapper">
-                <a class="brand-logo center" href="#">ARImport <i class="material-icons">account_balance</i></a>
+                <a class="brand-logo center" href="/">ARImport <i class="material-icons">account_balance</i></a>
             </div>
         </nav>
     </div>    
@@ -21,14 +21,14 @@
         <h4>Import CSV</h4>
         <p>Please select which file to upload then click the submit button below.</p>
         <br>
-        <form action="#" method="post"> <!-- POST Form for CSV files -->
+        <form action="/store" method="post" enctype="multipart/form-data"><!-- POST Form for CSV files -->
             <div class="file-field input-field">
                 <div class="btn">
                     <span>FILE</span>
-                    <input type="file" accept=".csv" multiple>
+                    <input name="csv" type="file" accept=".csv" multiple>
                 </div>
                 <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text" placeholder="Upload one or more files">
+                    <input name="filename" class="file-path validate" type="text" placeholder="Upload one or more files">
                 </div>
             </div>
             <button class="btn-large waves-effect waves-light" type="submit" style="left: 45%">Submit <i class="material-icons right">send</i></button>
