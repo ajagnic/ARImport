@@ -1,11 +1,23 @@
 package main
 
 import (
-	"log"
 	"net/http"
+	"ARImport/output"
 )
 
+func indexHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "./static/index.html")
+}
+
+func contentHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "." + r.URL.Path)
+}
+
 func main() {
-	logger := log.New(nil, "", 0)
-	logger.Fatal(http.ListenAndServe("127.0.0.1:8001", nil))
+	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/static/", contentHandler)
+
+	err := http.ListenAndServe(":8001", nil)
+	output.Log.Fatal(err)
+	defer output.Close()
 }
