@@ -1,4 +1,4 @@
-/*Package 'output' contains interface for logging errors to text file.
+/*Package output contains interface for logging errors to text file.
  */
 package output
 
@@ -8,6 +8,7 @@ import (
 	"os"
 )
 
+// Log is a pointer to the log.Logger struct.
 var Log *log.Logger
 
 var file *os.File
@@ -21,7 +22,7 @@ func init() {
 	Log = log.New(file, "Error: ", log.LstdFlags)
 }
 
-//Close flushes data and releases file resource.
+//Close function flushes data and releases log file resource.
 func Close() {
 	file.Sync()
 	file.Close()
