@@ -42,9 +42,9 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 			_, err = io.CopyBuffer(file, part, nil)
 			output.Pf("CopyBuffer: %v", err, false)
-
-			http.ServeFile(w, r, "./static/index.html")
 		}
+
+		http.ServeFile(w, r, "./static/index.html")
 	} else {
 		http.ServeFile(w, r, "./static/error.html")
 		output.Log.Printf("Invalid method in /store: %v", r.Method)
