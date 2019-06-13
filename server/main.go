@@ -18,12 +18,13 @@ func contentHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "."+r.URL.Path)
 }
 
+//postHandler streams up form data from POST and saves to local file.
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		rdr, err := r.MultipartReader()
 		output.Pf("File reader: %v", err, false)
 
-		for {
+		for { //Loop file parts until EOF and place in write buffer.
 			part, err := rdr.NextPart()
 			if err == io.EOF {
 				break
