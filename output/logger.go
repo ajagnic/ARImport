@@ -22,6 +22,17 @@ func init() {
 	Log = log.New(file, "Error: ", log.LstdFlags)
 }
 
+//Pf function is a wrapper around Logger.Printf and Logger.Fatal
+func Pf(fS string, err error, fatal bool) {
+	if err != nil {
+		if fatal {
+			Log.Fatal(err)
+		} else {
+			Log.Printf(fS, err)
+		}
+	}
+}
+
 //Close function flushes data and releases log file resource.
 func Close() {
 	file.Sync()

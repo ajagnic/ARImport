@@ -1,8 +1,10 @@
 package main
 
 import (
-	"net/http"
 	"fmt"
+	"io"
+	"net/http"
+	"os"
 
 	"github.com/ajagnic/ARImport/output"
 )
@@ -16,25 +18,33 @@ func contentHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "."+r.URL.Path)
 }
 
-//postHandler parses form data POSTed to /store.
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		// if err := r.ParseForm(); err != nil {
-		// 	output.Log.Print("Could not parse form in /store: ", err)
-		// }
-		// if err := r.ParseMultipartForm(); err != nil {
-		// 	output.Log.Print("Could not parse form in /store: ", err)
-		// }
+		rdr, err := r.MultipartReader()
+		output.Pf("File reader: %v", err, false)
 
-		// csvFile, head, err := r.FormFile("csv")
-		// if err != nil {
-		// 	output.Log.Fatal(err)
-		// }
-		// output.Log.Print(head)
-		// output.Log.Print(csvFile)
+		for {
+			part, err := rdr.NextPart()
+			if err == io.EOF {
+				break
+			} else {
+				output.Pf("File parts: %v", err, false)
+			}
+
+			if part.FileName() == "" {
+				continue
+			}
+
+			file, err := os.OpenFile("./server/csv/"+part.FileName(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			output.Pf("", err, true)
+			defer file.Close()
+
+			_, err = io.CopyBuffer(file, part, nil)
+			output.Pf("CopyBuffer: %v", err, false)
+		}
 	} else {
 		http.ServeFile(w, r, "./static/error.html")
-		output.Log.Printf("Invalid Method in /store: %v", r.Method)
+		output.Log.Printf("Invalid method in /store: %v", r.Method)
 	}
 }
 
@@ -46,8 +56,9 @@ func main() {
 	addr := ":8001"
 
 	fmt.Printf("Starting server on URL/Port: %v\n", addr)
-	if err := http.ListenAndServe(addr, nil); err != nil {
-		output.Log.Fatal(err)
-	}
-	defer output.Close()
+
+	err := http.ListenAndServe(addr, nil)
+	output.Pf("", err, true)
+
+	output.Close()
 }
