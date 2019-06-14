@@ -43,7 +43,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 			_, err = io.CopyBuffer(file, part, nil)
 			output.Pf("CopyBuffer: %v", err, false)
 		}
-
+		//process for flagging files rdy to parse(done writing), chan msg to routine?
 		http.ServeFile(w, r, "./static/index.html")
 	} else {
 		http.ServeFile(w, r, "./static/error.html")
