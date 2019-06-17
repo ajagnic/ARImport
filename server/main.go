@@ -36,14 +36,14 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 				continue
 			}
 
-			file, err := os.OpenFile("./server/csv/"+part.FileName(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+			file, err := os.OpenFile("./static/csv/"+part.FileName(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 			output.Pf("", err, true)
 			defer file.Close()
 
 			_, err = io.CopyBuffer(file, part, nil)
 			output.Pf("CopyBuffer: %v", err, false)
 		}
-		//process for flagging files rdy to parse(done writing), chan msg to routine?
+
 		http.ServeFile(w, r, "./static/index.html")
 	} else {
 		http.ServeFile(w, r, "./static/error.html")
