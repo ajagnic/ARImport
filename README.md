@@ -1,7 +1,7 @@
 # ARImport
 
 ### Building
-```golang
+```console
 >> go build .\server\main.go
 >> ./main.exe
 ```
@@ -11,7 +11,7 @@
 *   exe
 #### Generate docs for package (examples)
 #### CMD :
-```golang
+```console
 >> go doc output
 Package output contains interface for logging errors to text file.
 
@@ -19,13 +19,13 @@ var Log *log.Logger
 func Close()
 func Pf(fS string, err error, fatal bool)
 ```
-```golang
+```console
 >> go doc output Log
 var Log *log.Logger
     Log is a pointer to the log.Logger struct.
 ```
 #### HTTP :
-```golang
+```console
 >> godoc -http=:8002
 ```
 *   Navigate to Packages -> Third party -> ajagnic -> ARImport
