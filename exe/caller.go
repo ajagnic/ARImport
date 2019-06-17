@@ -1,9 +1,15 @@
-/*Package exe executes external binaries.
- */
 package exe
 
-import "fmt"
+import (
+	"fmt"
+	"os/exec"
+)
 
-func test() {
-	fmt.Println("test")
+func RunBin() {
+	cmd := exec.Command("./exe/RunExternally.exe")
+	out, err := cmd.Output()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(out))
 }

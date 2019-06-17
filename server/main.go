@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/ajagnic/ARImport/exe"
 	"github.com/ajagnic/ARImport/output"
 )
 
@@ -52,6 +53,9 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	//TODO: thread off exe src
+	exe.RunBin()
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SERVER
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/static/", contentHandler)
 	http.HandleFunc("/store", postHandler)
@@ -60,8 +64,9 @@ func main() {
 
 	fmt.Printf("Starting server on URL/Port: %v\n", addr)
 
-	err := http.ListenAndServe(addr, nil)
+	err := http.ListenAndServe(addr, nil) //NOTE: Blocking function call
 	output.Pf("", err, true)
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	output.Close()
 }

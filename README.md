@@ -3,12 +3,13 @@
 ### Building
 ```console
 >> go build .\server\main.go
->> ./main.exe
+>> .\main.exe
 ```
 
 ### Packages
 *   output
 *   exe
+
 #### Generate docs for package (examples)
 #### CMD :
 ```console
@@ -19,11 +20,13 @@ var Log *log.Logger
 func Close()
 func Pf(fS string, err error, fatal bool)
 ```
+
 ```console
 >> go doc output Log
 var Log *log.Logger
     Log is a pointer to the log.Logger struct.
 ```
+
 #### HTTP :
 ```console
 >> godoc -http=:8002

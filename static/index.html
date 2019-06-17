@@ -16,11 +16,10 @@
                 <a class="brand-logo center" href="/">ARImport <i class="material-icons">account_balance</i></a>
             </div>
         </nav>
-    </div>    
+    </div>
     <div class="container">
-        <h4>Import CSV</h4>
-        <p>Please select which file to upload then click the submit button below.</p>
-        <br>
+        <h5>Import CSV</h5>
+        <p>Please select which file* to upload then click the submit button below.</p>
         <form action="/store" method="post" enctype="multipart/form-data"><!-- POST Form for CSV files -->
             <div class="file-field input-field">
                 <div class="btn">
@@ -33,6 +32,8 @@
             </div>
             <button class="btn-large waves-effect waves-light" type="submit" style="left: 45%">Submit <i class="material-icons right">send</i></button>
         </form>
+        <br><br><br>
+        <small>* Files will be appended if their filenames are identical, if this is not intended please be change the filename.</small>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>
