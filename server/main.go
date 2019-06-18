@@ -8,6 +8,7 @@ import (
 
 	"github.com/ajagnic/ARImport/exe"
 	"github.com/ajagnic/ARImport/output"
+	"github.com/ajagnic/ARImport/scheduler"
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -53,8 +54,8 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	//TODO: thread off exe src
 	exe.RunBin()
+	scheduler.Run() // need to thread off
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SERVER
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/static/", contentHandler)
@@ -64,7 +65,7 @@ func main() {
 
 	fmt.Printf("Starting server on URL/Port: %v\n", addr)
 
-	err := http.ListenAndServe(addr, nil) //NOTE: Blocking function call
+	err := http.ListenAndServe(addr, nil) //NOTE: Blocking function call //TODO: safely handle shutdown/cancel
 	output.Pf("", err, true)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
