@@ -1,12 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"os/signal"
 
-	"github.com/ajagnic/ARImport/exe"
 	"github.com/ajagnic/ARImport/output"
 	"github.com/ajagnic/ARImport/scheduler"
 )
@@ -46,7 +47,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 			output.Pf("CopyBuffer: %v", err, false)
 		}
 
-		http.ServeFile(w, r, "./static/index.html")
+		http.ServeFile(w, r, "./static/index.html") //TODO: implement this route w/ custom handler (middleware), test if process continues while http serves new
 	} else {
 		http.ServeFile(w, r, "./static/error.html")
 		output.Log.Printf("Invalid method in /store: %v", r.Method)
@@ -54,19 +55,32 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	exe.RunBin()
-	scheduler.Run() // need to thread off
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULER
+	scheduler.Config()
+	go scheduler.Run()
+
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SERVER
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/static/", contentHandler)
 	http.HandleFunc("/store", postHandler)
 
 	addr := ":8001"
+	srv := http.Server{Addr: addr, ErrorLog: output.Log}
 
-	fmt.Printf("Starting server on URL/Port: %v\n", addr)
+	serverKill := make(chan os.Signal)
+	signal.Notify(serverKill, os.Interrupt)
 
-	err := http.ListenAndServe(addr, nil) //NOTE: Blocking function call //TODO: safely handle shutdown/cancel
+	go func() {
+		fmt.Printf("Starting server on URL/Port: %v\n", addr)
+		err := srv.ListenAndServe()
+		output.Pf("", err, true)
+	}()
+
+	<-serverKill
+	err := srv.Shutdown(context.Background())
 	output.Pf("", err, true)
+	fmt.Println("Server gracefully shutdown.")
+
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	output.Close()

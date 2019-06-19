@@ -1,2 +1,5 @@
 Error: 2019/06/13 09:18:05 File parts: multipart: NextPart: http: invalid Read on closed Body
 Error: 2019/06/13 09:20:03 File parts: multipart: NextPart: http: invalid Read on closed Body
+Error: 2019/06/19 13:56:31 Timer: 2019-06-19 13:56:31.970402 -0700 PDT m=+300.003069101
+Error: 2019/06/19 14:04:06 Timer: 2019-06-19 14:04:06.5233899 -0700 PDT m=+60.004011101
+Error: 2019/06/19 14:52:35 http: Server closed
