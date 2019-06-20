@@ -26,6 +26,7 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 
 		if err == nil {
 			defer file.Close()
+			defer scheduler.Config() //Re-initialize scheduler to new runtime.
 			file.WriteString(runTime)
 		}
 	}

@@ -34,3 +34,7 @@ func Config() {
 	runTime = time.Date(today.Year(), today.Month(), today.Day(), runHour, runMin, 0, 0, loc)
 	fmt.Println(runTime)
 }
+
+func run() {
+	return
+}
