@@ -1,3 +1,5 @@
+/*Package scheduler executes binaries at a certain datetime.
+ */
 package scheduler
 
 import (
@@ -6,14 +8,15 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/ajagnic/ARImport/output"
+	"github.com/ajagnic/ARImport/src/output"
 )
 
 var runTime time.Time
+var reInit chan bool
 
 //Config parses config.txt and initiates runTime var.
 func Config() {
-	cfg, err := os.Open("./scheduler/config.txt")
+	cfg, err := os.Open("./static/cfg/config.txt")
 	defer cfg.Close()
 	output.Pf("Could not open config in scheduler: %v", err, false)
 
@@ -35,6 +38,15 @@ func Config() {
 	fmt.Println(runTime)
 }
 
-func run() {
-	return
+//ReInit listens for new config and re-starts any running scheduler processes.
+func ReInit(reInitChan, kill chan bool) {
+	reInit = reInitChan
+	for {
+		select {
+		case <-kill:
+			return
+		case <-reInit:
+			Config()
+		}
+	}
 }

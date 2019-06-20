@@ -8,9 +8,11 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/ajagnic/ARImport/output"
-	"github.com/ajagnic/ARImport/scheduler"
+	"github.com/ajagnic/ARImport/src/output"
+	"github.com/ajagnic/ARImport/src/scheduler"
 )
+
+var reinit chan bool
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./static/index.html")
@@ -21,14 +23,16 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
 		runTime := r.FormValue("runtime")
 
-		file, err := os.OpenFile("./scheduler/config.txt", os.O_WRONLY, 0644)
+		file, err := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
 		output.Pf("Could not open config file: %v", err, false)
 
 		if err == nil {
-			defer file.Close()
-			defer scheduler.Config() //Re-initialize scheduler to new runtime.
 			file.WriteString(runTime)
+			file.Sync()
+			file.Close()
+			reinit <- true
 		}
+
 	}
 	http.ServeFile(w, r, "./static/config.html")
 }
@@ -73,7 +77,10 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULER
+	reinit = make(chan bool)
+	killscheduler := make(chan bool, 1)
 	scheduler.Config()
+	go scheduler.ReInit(reinit, killscheduler)
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SERVER
 	addr := ":8001"
@@ -100,6 +107,7 @@ func main() {
 	<-sigint
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CLEANUP
+	killscheduler <- true
 	err := srv.Shutdown(context.Background())
 	output.Pf("", err, true)
 	output.Close()
