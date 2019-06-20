@@ -1,85 +1,82 @@
 package scheduler
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/ajagnic/ARImport/output"
 )
 
 var runTime time.Time
-var hourTimer *time.Timer
 
 func Config() {
 	today := time.Now()
 	loc := time.FixedZone("UTC-7", 0)
-	//Run every month, every day at 12:00:00:00
-	runTime = time.Date(today.Year(), today.Month(), today.Day(), 2, 4, 0, 0, loc)
+	//Run every month, every day at specified time.
+	runTime = time.Date(today.Year(), today.Month(), today.Day(), 9, 42, 0, 0, loc)
+	output.Log.Printf("RunTime: %v", runTime)
 }
 
-func Run() {
-	//initaite timer ever hour to compare current time
-	hourTimer = time.NewTimer(time.Minute)
-
+func Run(timekill chan bool) {
+	hourTicker := time.NewTicker(5 * time.Second)
 	for {
 		select {
-		case tick := <-hourTimer.C:
-			//hour event, check if equal to runTime
-			output.Log.Printf("Timer: %v", tick)
-			if compare(tick) {
-				output.Log.Print("RUNNING EXEC")
-			} else {
-				continue
+		case <-timekill:
+			hourTicker.Stop()
+			fmt.Println("stopped")
+			break
+		case bzz := <-hourTicker.C:
+			fmt.Println(bzz)
+			output.Log.Println(bzz)
+			if compare(bzz) {
+				hourTicker.Stop()
+				minTicker := time.NewTicker(time.Second)
+				minkill := make(chan bool, 1)
+				go func() {
+					time.Sleep(5 * time.Second)
+					minkill <- true
+				}()
+				for {
+					select {
+					case <-minkill:
+						minTicker.Stop()
+						break
+					case t := <-minTicker.C:
+						fmt.Println(t)
+						output.Log.Println(t)
+					}
+				}
 			}
 		}
 	}
 }
 
-func compare(tick time.Time) bool {
-	if tick.Hour() == runTime.Hour() {
-		if tick.Minute() == runTime.Minute() { //possibly check if +/- 1, 2, 3 minutes
-			return true
-		}
-		//within hour, reset timer to every minute
-		hourTimer.Stop()
-		hourTimer.Reset(time.Minute)
+func compare(buzz time.Time) bool {
+	buzzMins := buzz.Minute()
+	runTimeMins := runTime.Minute()
+	if buzzMins == runTimeMins || buzzMins == runTimeMins+1 || buzzMins == runTimeMins-1 {
+		return true
 	}
 	return false
 }
 
-// var runTime time.Time
-// var currentTime time.Time
-
-// func init() {
-// 	loc := time.FixedZone("UTC-7", 0)
-// 	runTime = time.Date(2019, time.June, 18, 24, 0, 0, 0, loc) // set time to run (read from config)
-// }
-
-// func Run() {
-// 	// contains channel receiving Time every 3 sec
-// 	ticker := time.NewTicker(3 * time.Second)
-// 	defer ticker.Stop()
-// 	stop := make(chan bool) // kill pill chan
-
-// 	//func to delay kill pill
-// 	go func() {
-// 		time.Sleep(12 * time.Second)
-// 		stop <- true
-// 	}()
-
-// 	// while w/ select listening to chans for Time or kill pill
-// 	// on Time, calls function
-// 	for {
-// 		select {
-// 		case <-stop:
-// 			fmt.Println("Stopped")
-// 			return
-// 		case <-ticker.C:
-// 			durationUntil()
+// if buzz.Hour() == runTime.Hour() {
+// 	if compare(buzz) {
+// 		output.Log.Printf("RUNNNG EXEC @ %v", buzz)
+// 	} else { //runTime within the hour.
+// 		hourTimer.Stop()
+// 		minTicker := time.NewTicker(time.Second)
+// 		//~~~~~~~~~~~~~~~~~~~~~~~
+// 		for {
+// 			buzz = <-minTicker.C
+// 			output.Log.Printf("Timer: %v", buzz)
+// 			if compare(buzz) {
+// 				output.Log.Printf("RUNNNG EXEC @ %v", buzz)
+// 				minTicker.Stop()
+// 				break
+// 			}
 // 		}
+// 		//~~~~~~~~~~~~~~~~~~~~~~~
+// 		hourTimer.Reset(time.Minute)
 // 	}
-// }
-
-// func durationUntil() {
-// 	durationTilExec := time.Until(runTime)
-// 	fmt.Println(durationTilExec)
 // }
