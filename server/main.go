@@ -9,6 +9,7 @@ import (
 	"os/signal"
 
 	"github.com/ajagnic/ARImport/output"
+	"github.com/ajagnic/ARImport/scheduler"
 )
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -71,6 +72,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULER
+	scheduler.Config()
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SERVER
 	addr := ":8001"
