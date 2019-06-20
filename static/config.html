@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Materialize CSS CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ARImport</title>
+</head>
+<body>
+    <div class="navbar">
+        <nav>
+            <div class="nav-wrapper">
+                <a class="brand-logo center" href="/">ARImport <i class="material-icons">account_balance</i></a>
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <h5>Server Configuration</h5>
+        <p>Please enter scheduled time to run Everest import.</p>
+        <small>Format: {DoubleHourDoubleMinutes}</small>
+        <br><br><br>
+        <form action="/config" method="post">
+            <div class="input-field">
+                <input type="text" id="runtime" name="runtime" placeholder="eg. 0930 | 1415 | 0000">
+                <label for="runtime">Run Time</label>
+            </div>
+            <button class="btn-large waves-effect waves-light" type="submit" style="left: 42%">Submit <i class="material-icons right">send</i></button>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</body>
+</html>
