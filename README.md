@@ -2,13 +2,14 @@
 
 ### Building
 ```console
->> go build .\server\main.go
+>> go build .\src\server\main.go
 >> .\main.exe
 ```
 
 ### Packages
 *   output
 *   exe
+*   scheduler
 
 #### Generate docs for package (examples)
 #### CMD :
