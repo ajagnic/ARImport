@@ -10,3 +10,5 @@ Error: 2019/06/20 14:48:57 http: Server closed
 Error: 2019/06/20 14:50:50 http: Server closed
 Error: 2019/06/20 14:50:58 http: Server closed
 Error: 2019/06/20 14:54:06 http: Server closed
+Error: 2019/06/20 15:50:33 listen tcp: address +: missing port in address
+Error: 2019/06/20 15:51:04 http: Server closed
