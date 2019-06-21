@@ -18,6 +18,7 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./static/index.html")
 }
 
+//configHandler parses config form on POST, saves to local file, then re-initializes scheduler.
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		r.ParseForm()
@@ -77,10 +78,10 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULER
-	reinit = make(chan bool)
-	killscheduler := make(chan bool, 1)
 	scheduler.Config()
-	go scheduler.ReInit(reinit, killscheduler)
+	reinit = make(chan bool)
+	killsched := make(chan bool, 1)
+	go scheduler.EventListener(reinit, killsched)
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SERVER
 	addr := ":8001"
@@ -107,7 +108,7 @@ func main() {
 	<-sigint
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CLEANUP
-	killscheduler <- true
+	killsched <- true
 	err := srv.Shutdown(context.Background())
 	output.Pf("", err, true)
 	output.Close()
