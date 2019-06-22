@@ -12,8 +12,9 @@ import (
 )
 
 var runTime time.Time
+var stopexec chan bool
 
-//Config parses /static/cfg/config.txt and initiates runTime variable.
+//Config parses config.txt and initiates runTime variable.
 func Config() {
 	cfg, err := os.Open("./static/cfg/config.txt")
 	defer cfg.Close()
@@ -32,9 +33,33 @@ func Config() {
 	output.Pf("strconv.Atoi() - runMin: %v", err, false)
 
 	today := time.Now()
-	loc := time.FixedZone("UTC-7", 0)
-	runTime = time.Date(today.Year(), today.Month(), today.Day(), runHour, runMin, 0, 0, loc)
+	runTime = time.Date(today.Year(), today.Month(), today.Day(), runHour, runMin, 0, 0, today.Location())
 	fmt.Println(runTime)
+
+	stopexec = make(chan bool, 1)
+	go start()
+}
+
+func start() {
+	now := time.Now()
+	fmt.Println(now)
+	if now.Before(runTime) {
+		durationUntil := time.Until(runTime)
+		fmt.Println(durationUntil)
+		exeTimer := time.AfterFunc(durationUntil, func() {
+			fmt.Println("RUNNING EXEC")
+			output.Log.Println("RUNNING EXEC")
+		})
+		select {
+		case <-stopexec:
+			output.Log.Println("STOPPED EXEC")
+			exeTimer.Stop()
+		}
+	} else {
+		fmt.Println("not before")
+		fmt.Println(now.Location())
+		os.Exit(1)
+	}
 }
 
 //EventListener waits for either re-init or kill events and calls necessary functions.
@@ -43,8 +68,10 @@ func EventListener(reinit, kill chan bool) {
 		select {
 		case <-kill:
 			fmt.Println("stopping scheduler")
+			stopexec <- true
 			break
 		case <-reinit:
+			stopexec <- true
 			Config()
 		}
 	}

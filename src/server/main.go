@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"time"
 
 	"github.com/ajagnic/ARImport/src/output"
 	"github.com/ajagnic/ARImport/src/scheduler"
@@ -110,6 +111,7 @@ func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CLEANUP
 	killsched <- true
 	err := srv.Shutdown(context.Background())
+	time.Sleep(time.Second) //change to use timeout context
 	output.Pf("", err, true)
 	output.Close()
 	fmt.Println("Server gracefully shutdown.")
