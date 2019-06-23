@@ -21,7 +21,7 @@ func Config() {
 	cfg, err := os.Open("./static/cfg/config.txt")
 	defer cfg.Close()
 
-	if err != nil {
+	if err == nil {
 		cfgBytes := []byte{0, 0, 0, 0}
 		_, e1 := cfg.Read(cfgBytes)
 
@@ -34,9 +34,11 @@ func Config() {
 		runTime = time.Date(today.Year(), today.Month(), today.Day(), runHour, runMin, 0, 0, today.Location())
 	} else {
 		//Config not read, default to 11:45pm.
+		output.Log.Printf("Config: %v", err)
 		runTime = time.Date(today.Year(), today.Month(), today.Day(), 23, 45, 0, 0, today.Location())
 	}
 
+	fmt.Println(runTime)
 	stopexec = make(chan bool, 1)
 	go start()
 }
@@ -45,6 +47,7 @@ func start() {
 	now := time.Now()
 	if now.Before(runTime) {
 		durationUntil := time.Until(runTime)
+		fmt.Println(durationUntil)
 		exeTimer := time.AfterFunc(durationUntil, func() {
 			output.Log.Println("RUNNING EXEC")
 		})
