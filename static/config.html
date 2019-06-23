@@ -24,8 +24,12 @@
         <br><br><br>
         <form action="/config" method="post">
             <div class="input-field">
-                <input type="text" id="runtime" name="runtime" placeholder="eg. 0930 | 1415 | 0000">
+                <input type="text" id="runtime" name="runtime" placeholder="0930 | 1415 | 0000">
                 <label for="runtime">Run Time</label>
+            </div>
+            <div class="input-field">
+                <input type="text" name="addr" placeholder="127.0.0.1:8001">
+                <label for="addr">Server Address</label>
             </div>
             <button class="btn-large waves-effect waves-light" type="submit" style="left: 42%">Submit <i class="material-icons right">send</i></button>
         </form>

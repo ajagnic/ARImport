@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"github.com/ajagnic/ARImport/src/output"
-	"github.com/ajagnic/ARImport/src/scheduler"
 )
 
 var reinit chan bool
@@ -22,22 +21,29 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 //configHandler parses config form on POST, saves to local file, then re-initializes scheduler.
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		e1 := r.ParseForm()
+		_ = r.ParseForm()
 		runTime := r.FormValue("runtime")
+		addr := r.FormValue("addr")
+		fmt.Println(runTime, addr)
+		output.WriteJSON()
+		output.ReadJSON()
 
-		file, e2 := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
-		output.Check(e1, e2)
+		// file, e2 := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
+		// output.Check(e1, e2)
 
-		if e2 == nil && runTime != "" {
-			_, e3 := file.WriteString(runTime)
-			e4 := file.Sync()
-			e5 := file.Close()
-			output.Check(e3, e4, e5)
+		// if e2 == nil && runTime != "" {
+		// 	_, e3 := file.WriteString(runTime)
+		// 	e4 := file.Sync()
+		// 	e5 := file.Close()
+		// 	output.Check(e3, e4, e5)
 
-			reinit <- true
-		} else {
-			http.Error(w, "Error with Config", 500)
-		}
+		// 	reinit <- true
+
+		// 	output.WriteJSON("test") //TEMP: test
+
+		// } else {
+		// 	http.Error(w, "Error with Config", 500)
+		// }
 	}
 	http.ServeFile(w, r, "./static/config.html")
 }
@@ -80,10 +86,10 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULER
-	scheduler.Config()
-	reinit = make(chan bool)
-	killsched := make(chan bool, 1)
-	go scheduler.EventListener(reinit, killsched)
+	// scheduler.Config()
+	// reinit = make(chan bool)
+	// killsched := make(chan bool, 1)
+	// go scheduler.EventListener(reinit, killsched)
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SERVER
 	addr := ":8001"
@@ -110,11 +116,13 @@ func main() {
 	<-sigint
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CLEANUP
-	killsched <- true
+	// killsched <- true
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
 	err := srv.Shutdown(ctx)
 	output.Pf("", err, true)
+
 	output.Close()
 	fmt.Println("Server gracefully shutdown.")
 }

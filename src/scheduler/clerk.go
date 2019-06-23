@@ -32,6 +32,7 @@ func Config() {
 		output.Check(e1, e2, e3)
 
 		runTime = time.Date(today.Year(), today.Month(), today.Day(), runHour, runMin, 0, 0, today.Location())
+		manageDays(runHour, runMin)
 	} else {
 		//Config not read, default to 11:45pm.
 		output.Log.Printf("Config: %v", err)
@@ -41,6 +42,21 @@ func Config() {
 	fmt.Println(runTime)
 	stopexec = make(chan bool, 1)
 	go start()
+}
+
+//EventListener waits for either re-init or kill events and calls necessary functions.
+func EventListener(reinit, kill chan bool) {
+	for {
+		select {
+		case <-kill:
+			fmt.Println("Stopping scheduler.")
+			stopexec <- true
+			break
+		case <-reinit:
+			stopexec <- true
+			Config()
+		}
+	}
 }
 
 func start() {
@@ -58,21 +74,10 @@ func start() {
 			exeTimer.Stop()
 		}
 	} else {
-		output.Pf("", fmt.Errorf("err"), true)
+		// output.Pf("", fmt.Errorf("err"), true)
 	}
 }
 
-//EventListener waits for either re-init or kill events and calls necessary functions.
-func EventListener(reinit, kill chan bool) {
-	for {
-		select {
-		case <-kill:
-			fmt.Println("Stopping scheduler.")
-			stopexec <- true
-			break
-		case <-reinit:
-			stopexec <- true
-			Config()
-		}
-	}
+func manageDays(hour, min int) {
+	return
 }
