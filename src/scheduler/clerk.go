@@ -58,7 +58,7 @@ func start() {
 			exeTimer.Stop()
 		}
 	} else {
-		output.Pf("runTime has passed.", fmt.Errorf("err"), true)
+		output.Pf("", fmt.Errorf("err"), true)
 	}
 }
 

@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"time"
 
 	"github.com/ajagnic/ARImport/src/output"
 	"github.com/ajagnic/ARImport/src/scheduler"
@@ -35,7 +36,7 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 
 			reinit <- true
 		} else {
-			//return 500
+			http.Error(w, "Error with Config", 500)
 		}
 	}
 	http.ServeFile(w, r, "./static/config.html")
@@ -73,8 +74,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 		http.ServeFile(w, r, "./static/index.html")
 	} else {
-		http.ServeFile(w, r, "./static/error.html") //return 500
-		output.Log.Printf("Invalid method in /store: %v", r.Method)
+		http.Error(w, "Invalid Method", 405)
 	}
 }
 
@@ -111,8 +111,9 @@ func main() {
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CLEANUP
 	killsched <- true
-	err := srv.Shutdown(context.Background())
-	// time.Sleep(time.Second) //change to use timeout context
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
+	err := srv.Shutdown(ctx)
 	output.Pf("", err, true)
 	output.Close()
 	fmt.Println("Server gracefully shutdown.")
