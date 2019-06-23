@@ -16,25 +16,26 @@ var stopexec chan bool
 
 //Config parses config.txt and initiates runTime variable.
 func Config() {
+	today := time.Now()
+
 	cfg, err := os.Open("./static/cfg/config.txt")
 	defer cfg.Close()
-	output.Pf("Could not open config in scheduler: %v", err, false)
 
-	cfgBytes := []byte{0, 0, 0, 0}
-	_, err = cfg.Read(cfgBytes)
-	output.Pf("Could not read from config file: %v", err, false)
+	if err != nil {
+		cfgBytes := []byte{0, 0, 0, 0}
+		_, e1 := cfg.Read(cfgBytes)
 
-	cfgString := string(cfgBytes)
+		cfgString := string(cfgBytes)
 
-	runHour, err := strconv.Atoi(cfgString[:2])
-	output.Pf("strconv.Atoi() - runHour: %v", err, false)
+		runHour, e2 := strconv.Atoi(cfgString[:2])
+		runMin, e3 := strconv.Atoi(cfgString[2:])
+		output.Check(e1, e2, e3)
 
-	runMin, err := strconv.Atoi(cfgString[2:])
-	output.Pf("strconv.Atoi() - runMin: %v", err, false)
-
-	today := time.Now()
-	runTime = time.Date(today.Year(), today.Month(), today.Day(), runHour, runMin, 0, 0, today.Location())
-	fmt.Println(runTime)
+		runTime = time.Date(today.Year(), today.Month(), today.Day(), runHour, runMin, 0, 0, today.Location())
+	} else {
+		//Config not read, default to 11:45pm.
+		runTime = time.Date(today.Year(), today.Month(), today.Day(), 23, 45, 0, 0, today.Location())
+	}
 
 	stopexec = make(chan bool, 1)
 	go start()
@@ -42,23 +43,19 @@ func Config() {
 
 func start() {
 	now := time.Now()
-	fmt.Println(now)
 	if now.Before(runTime) {
 		durationUntil := time.Until(runTime)
-		fmt.Println(durationUntil)
 		exeTimer := time.AfterFunc(durationUntil, func() {
-			fmt.Println("RUNNING EXEC")
 			output.Log.Println("RUNNING EXEC")
 		})
+
 		select {
 		case <-stopexec:
 			output.Log.Println("STOPPED EXEC")
 			exeTimer.Stop()
 		}
 	} else {
-		fmt.Println("not before")
-		fmt.Println(now.Location())
-		os.Exit(1)
+		output.Pf("runTime has passed.", fmt.Errorf("err"), true)
 	}
 }
 
@@ -67,7 +64,7 @@ func EventListener(reinit, kill chan bool) {
 	for {
 		select {
 		case <-kill:
-			fmt.Println("stopping scheduler")
+			fmt.Println("Stopping scheduler.")
 			stopexec <- true
 			break
 		case <-reinit:

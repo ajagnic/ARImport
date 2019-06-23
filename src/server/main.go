@@ -22,19 +22,22 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 //configHandler parses config form on POST, saves to local file, then re-initializes scheduler.
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		r.ParseForm()
+		e1 := r.ParseForm()
 		runTime := r.FormValue("runtime")
 
-		file, err := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
-		output.Pf("Could not open config file: %v", err, false)
+		file, e2 := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
+		output.Check(e1, e2)
 
-		if err == nil {
-			file.WriteString(runTime)
-			file.Sync()
-			file.Close()
+		if e2 == nil && runTime != "" {
+			_, e3 := file.WriteString(runTime)
+			e4 := file.Sync()
+			e5 := file.Close()
+			output.Check(e3, e4, e5)
+
 			reinit <- true
+		} else {
+			//return 500
 		}
-
 	}
 	http.ServeFile(w, r, "./static/config.html")
 }
@@ -48,31 +51,30 @@ func contentHandler(w http.ResponseWriter, r *http.Request) {
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		rdr, err := r.MultipartReader()
-		output.Pf("File reader: %v", err, false)
+		output.Pf("MultipartReader: %v", err, false)
 
-		for { //Loop file parts until EOF and place in write buffer.
-			part, err := rdr.NextPart()
-			if err == io.EOF {
-				break
-			} else {
-				output.Pf("File parts: %v", err, false)
+		if rdr != nil {
+			for { //Loop file parts until EOF and place in write buffer.
+				part, e1 := rdr.NextPart()
+				if e1 == io.EOF {
+					break
+				}
+
+				if part.FileName() == "" {
+					continue
+				}
+
+				file, e2 := os.OpenFile("./static/csv/"+part.FileName(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+				defer file.Close()
+
+				_, e3 := io.CopyBuffer(file, part, nil)
+				output.Check(e1, e2, e3)
 			}
-
-			if part.FileName() == "" {
-				continue
-			}
-
-			file, err := os.OpenFile("./static/csv/"+part.FileName(), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-			output.Pf("", err, true)
-			defer file.Close()
-
-			_, err = io.CopyBuffer(file, part, nil)
-			output.Pf("CopyBuffer: %v", err, false)
 		}
 
 		http.ServeFile(w, r, "./static/index.html")
 	} else {
-		http.ServeFile(w, r, "./static/error.html")
+		http.ServeFile(w, r, "./static/error.html") //return 500
 		output.Log.Printf("Invalid method in /store: %v", r.Method)
 	}
 }

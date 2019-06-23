@@ -22,6 +22,15 @@ func init() {
 	Log = log.New(file, "Error: ", log.LstdFlags)
 }
 
+//Check can take multiple errors and log them.
+func Check(errs ...error) {
+	for _, err := range errs {
+		if err != nil {
+			Log.Println(err)
+		}
+	}
+}
+
 //Pf is a wrapper around Logger.Printf and Logger.Fatal
 func Pf(fS string, err error, fatal bool) {
 	if err != nil {
