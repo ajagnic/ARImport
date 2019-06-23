@@ -4,7 +4,6 @@ package scheduler
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 	"time"
 
@@ -18,21 +17,13 @@ var stopexec chan bool
 func Config() {
 	today := time.Now()
 
-	cfg, err := os.Open("./static/cfg/config.txt")
-	defer cfg.Close()
-
+	cfg, err := output.ReadJSON()
 	if err == nil {
-		cfgBytes := []byte{0, 0, 0, 0}
-		_, e1 := cfg.Read(cfgBytes)
-
-		cfgString := string(cfgBytes)
-
-		runHour, e2 := strconv.Atoi(cfgString[:2])
-		runMin, e3 := strconv.Atoi(cfgString[2:])
-		output.Check(e1, e2, e3)
-
-		runTime = time.Date(today.Year(), today.Month(), today.Day(), runHour, runMin, 0, 0, today.Location())
-		manageDays(runHour, runMin)
+		rt := cfg.RunTime
+		hour, _ := strconv.Atoi(rt[:2])
+		min, _ := strconv.Atoi(rt[2:])
+		runTime = time.Date(today.Year(), today.Month(), today.Day(), hour, min, 0, 0, today.Location())
+		manageDays(hour, min)
 	} else {
 		//Config not read, default to 11:45pm.
 		output.Log.Printf("Config: %v", err)
@@ -73,6 +64,10 @@ func start() {
 			output.Log.Println("STOPPED EXEC")
 			exeTimer.Stop()
 		}
+
+		cfg, _ := output.ReadJSON()
+		cfg.LastRun = time.Now()
+		_ = output.WriteJSON(cfg)
 	} else {
 		// output.Pf("", fmt.Errorf("err"), true)
 	}

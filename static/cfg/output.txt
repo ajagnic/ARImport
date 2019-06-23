@@ -68,3 +68,244 @@ Error: 2019/06/23 00:21:42 strconv.Atoi: parsing "Ad": invalid syntax
 Error: 2019/06/23 00:25:15 http: Server closed
 Error: 2019/06/23 00:25:21 strconv.Atoi: parsing "{\"": invalid syntax
 Error: 2019/06/23 00:25:21 strconv.Atoi: parsing "Ad": invalid syntax
+Error: 2019/06/23 01:41:22 http: panic serving [::1]:55162: runtime error: invalid memory address or nil pointer dereference
+goroutine 8 [running]:
+net/http.(*conn).serve.func1(0xc00009c8c0)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c9a80, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc000150500)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:65 +0x164
+main.configHandler(0x789d20, 0xc000140540, 0xc000150500)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0xc8
+net/http.HandlerFunc.ServeHTTP(0x7359d8, 0x789d20, 0xc000140540, 0xc000150500)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789d20, 0xc000140540, 0xc000150500)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc00009ad00, 0x789d20, 0xc000140540, 0xc000150500)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc00009c8c0, 0x78a2e0, 0xc00002a4c0)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:41:22 http: panic serving [::1]:55170: runtime error: invalid memory address or nil pointer dereference
+goroutine 20 [running]:
+net/http.(*conn).serve.func1(0xc00016c280)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c9a80, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc000150600)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:65 +0x164
+main.configHandler(0x789d20, 0xc000260000, 0xc000150600)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0xc8
+net/http.HandlerFunc.ServeHTTP(0x7359d8, 0x789d20, 0xc000260000, 0xc000150600)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789d20, 0xc000260000, 0xc000150600)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc00009ad00, 0x789d20, 0xc000260000, 0xc000150600)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc00016c280, 0x78a2e0, 0xc00013d980)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:41:22 http: panic serving [::1]:55172: runtime error: invalid memory address or nil pointer dereference
+goroutine 22 [running]:
+net/http.(*conn).serve.func1(0xc00016c3c0)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c9a80, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc00028e000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:65 +0x164
+main.configHandler(0x789d20, 0xc0002600e0, 0xc00028e000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0xc8
+net/http.HandlerFunc.ServeHTTP(0x7359d8, 0x789d20, 0xc0002600e0, 0xc00028e000)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789d20, 0xc0002600e0, 0xc00028e000)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc00009ad00, 0x789d20, 0xc0002600e0, 0xc00028e000)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc00016c3c0, 0x78a2e0, 0xc000128180)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:44:42 http: panic serving [::1]:55198: runtime error: invalid memory address or nil pointer dereference
+goroutine 19 [running]:
+net/http.(*conn).serve.func1(0xc000134000)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c99a0, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc000146000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:65 +0x164
+main.configHandler(0x789cc0, 0xc00015c000, 0xc000146000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0x113
+net/http.HandlerFunc.ServeHTTP(0x7358f8, 0x789cc0, 0xc00015c000, 0xc000146000)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789cc0, 0xc00015c000, 0xc000146000)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc00009ad00, 0x789cc0, 0xc00015c000, 0xc000146000)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc000134000, 0x78a280, 0xc00013a040)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:44:42 http: panic serving [::1]:55200: runtime error: invalid memory address or nil pointer dereference
+goroutine 20 [running]:
+net/http.(*conn).serve.func1(0xc0001340a0)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c99a0, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc000144000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:65 +0x164
+main.configHandler(0x789cc0, 0xc000190000, 0xc000144000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0x113
+net/http.HandlerFunc.ServeHTTP(0x7358f8, 0x789cc0, 0xc000190000, 0xc000144000)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789cc0, 0xc000190000, 0xc000144000)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc00009ad00, 0x789cc0, 0xc000190000, 0xc000144000)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc0001340a0, 0x78a280, 0xc000118100)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:44:42 http: panic serving [::1]:55206: runtime error: invalid memory address or nil pointer dereference
+goroutine 21 [running]:
+net/http.(*conn).serve.func1(0xc000134140)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c99a0, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc000144100)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:65 +0x164
+main.configHandler(0x789cc0, 0xc0001b6000, 0xc000144100)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0x113
+net/http.HandlerFunc.ServeHTTP(0x7358f8, 0x789cc0, 0xc0001b6000, 0xc000144100)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789cc0, 0xc0001b6000, 0xc000144100)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc00009ad00, 0x789cc0, 0xc0001b6000, 0xc000144100)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc000134140, 0x78a280, 0xc000118200)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:47:56 http: panic serving [::1]:55230: runtime error: invalid memory address or nil pointer dereference
+goroutine 19 [running]:
+net/http.(*conn).serve.func1(0xc000134000)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c9a00, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc000146000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:66 +0x1b6
+main.configHandler(0x789d20, 0xc00015a000, 0xc000146000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0x113
+net/http.HandlerFunc.ServeHTTP(0x735958, 0x789d20, 0xc00015a000, 0xc000146000)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789d20, 0xc00015a000, 0xc000146000)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc00009ac30, 0x789d20, 0xc00015a000, 0xc000146000)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc000134000, 0x78a2e0, 0xc00013a040)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:47:56 http: panic serving [::1]:55232: runtime error: invalid memory address or nil pointer dereference
+goroutine 20 [running]:
+net/http.(*conn).serve.func1(0xc0001340a0)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c9a00, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc000144000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:66 +0x1b6
+main.configHandler(0x789d20, 0xc000190000, 0xc000144000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0x113
+net/http.HandlerFunc.ServeHTTP(0x735958, 0x789d20, 0xc000190000, 0xc000144000)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789d20, 0xc000190000, 0xc000144000)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc00009ac30, 0x789d20, 0xc000190000, 0xc000144000)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc0001340a0, 0x78a2e0, 0xc000118100)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:47:56 http: panic serving [::1]:55236: runtime error: invalid memory address or nil pointer dereference
+goroutine 8 [running]:
+net/http.(*conn).serve.func1(0xc00009caa0)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c9a00, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc0001aa000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:66 +0x1b6
+main.configHandler(0x789d20, 0xc0001900e0, 0xc0001aa000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0x113
+net/http.HandlerFunc.ServeHTTP(0x735958, 0x789d20, 0xc0001900e0, 0xc0001aa000)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789d20, 0xc0001900e0, 0xc0001aa000)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc00009ac30, 0x789d20, 0xc0001900e0, 0xc0001aa000)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc00009caa0, 0x78a2e0, 0xc00002a500)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:49:24 http: panic serving [::1]:55246: runtime error: invalid memory address or nil pointer dereference
+goroutine 19 [running]:
+net/http.(*conn).serve.func1(0xc000134000)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c9a00, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc00014e100)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:66 +0x1b6
+main.configHandler(0x789d20, 0xc00015a0e0, 0xc00014e100)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0x113
+net/http.HandlerFunc.ServeHTTP(0x735958, 0x789d20, 0xc00015a0e0, 0xc00014e100)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789d20, 0xc00015a0e0, 0xc00014e100)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc0000989c0, 0x789d20, 0xc00015a0e0, 0xc00014e100)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc000134000, 0x78a2e0, 0xc000118100)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:49:24 http: panic serving [::1]:55248: runtime error: invalid memory address or nil pointer dereference
+goroutine 34 [running]:
+net/http.(*conn).serve.func1(0xc000142000)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c9a00, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc00014e000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:66 +0x1b6
+main.configHandler(0x789d20, 0xc00019a000, 0xc00014e000)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0x113
+net/http.HandlerFunc.ServeHTTP(0x735958, 0x789d20, 0xc00019a000, 0xc00014e000)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789d20, 0xc00019a000, 0xc00014e000)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc0000989c0, 0x789d20, 0xc00019a000, 0xc00014e000)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc000142000, 0x78a2e0, 0xc000148040)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 01:49:24 http: panic serving [::1]:55252: runtime error: invalid memory address or nil pointer dereference
+goroutine 21 [running]:
+net/http.(*conn).serve.func1(0xc000134140)
+	/usr/local/go/src/net/http/server.go:1769 +0x139
+panic(0x6c9a00, 0x9798a0)
+	/usr/local/go/src/runtime/panic.go:522 +0x1b5
+github.com/ajagnic/ARImport/src/output.ReadJSON(0xc000144100)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/output/logger.go:66 +0x1b6
+main.configHandler(0x789d20, 0xc00019a0e0, 0xc000144100)
+	/home/ajagnic/go/src/github.com/ajagnic/ARImport/src/server/main.go:27 +0x113
+net/http.HandlerFunc.ServeHTTP(0x735958, 0x789d20, 0xc00019a0e0, 0xc000144100)
+	/usr/local/go/src/net/http/server.go:1995 +0x44
+net/http.(*ServeMux).ServeHTTP(0x985a40, 0x789d20, 0xc00019a0e0, 0xc000144100)
+	/usr/local/go/src/net/http/server.go:2375 +0x1d6
+net/http.serverHandler.ServeHTTP(0xc0000989c0, 0x789d20, 0xc00019a0e0, 0xc000144100)
+	/usr/local/go/src/net/http/server.go:2774 +0xa8
+net/http.(*conn).serve(0xc000134140, 0x78a2e0, 0xc000118300)
+	/usr/local/go/src/net/http/server.go:1878 +0x851
+created by net/http.(*Server).Serve
+	/usr/local/go/src/net/http/server.go:2884 +0x2f4
+Error: 2019/06/23 02:19:20 http: Server closed

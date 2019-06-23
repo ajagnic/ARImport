@@ -1,4 +1,4 @@
-/*Package output contains interface for logging errors to text file.
+/*Package output contains interface for logging errors to text file and parsing JSON.
  */
 package output
 
@@ -7,19 +7,18 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 )
 
 type config struct {
 	Addr    string
 	RunTime string
-	LastRun string
+	LastRun time.Time
 }
 
-// Log is a pointer to the log.Logger struct.
 var Log *log.Logger
 
 var file *os.File
-var cfg config
 
 func init() {
 	file, err := os.OpenFile("./static/cfg/output.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -56,21 +55,23 @@ func Close() {
 	file.Close()
 }
 
-//ReadJSON is a test.
-func ReadJSON() {
-	var cfgg config
+//ReadJSON parses config.txt and returns config struct.
+func ReadJSON() (cfg config, err error) {
 	file, _ := os.OpenFile("./static/cfg/config.txt", os.O_RDWR, 0644)
-	fileBytes := make([]byte, 49)
+	defer file.Close()
+	fileBytes := make([]byte, 66)
 	b, _ := file.Read(fileBytes)
 	fmt.Println(b)
-	err := json.Unmarshal(fileBytes, &cfgg)
+	err = json.Unmarshal(fileBytes, &cfg)
 	fmt.Println(cfg.Addr, err)
+	return
 }
 
-func WriteJSON() {
-	cfg = config{"8001", "1234", "1234"}
+//WriteJSON serializes config struct to file.
+func WriteJSON(cfg config) (err error) {
 	file, _ := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
-	bytes, _ := json.Marshal(cfg)
+	defer file.Close()
+	bytes, err := json.Marshal(&cfg)
 	file.Write(bytes)
-	file.Close()
+	return
 }

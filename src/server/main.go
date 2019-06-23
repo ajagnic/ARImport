@@ -22,28 +22,19 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		_ = r.ParseForm()
+		cfg, _ := output.ReadJSON()
+
+		addr := r.FormValue("addr") //BUG(r): sometimes lose reference to a value.
+		if addr != "" {
+			cfg.Addr = addr
+		}
 		runTime := r.FormValue("runtime")
-		addr := r.FormValue("addr")
-		fmt.Println(runTime, addr)
-		output.WriteJSON()
-		output.ReadJSON()
+		if runTime != "" {
+			cfg.RunTime = runTime
+		}
+		_ = output.WriteJSON(cfg)
 
-		// file, e2 := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
-		// output.Check(e1, e2)
-
-		// if e2 == nil && runTime != "" {
-		// 	_, e3 := file.WriteString(runTime)
-		// 	e4 := file.Sync()
-		// 	e5 := file.Close()
-		// 	output.Check(e3, e4, e5)
-
-		// 	reinit <- true
-
-		// 	output.WriteJSON("test") //TEMP: test
-
-		// } else {
-		// 	http.Error(w, "Error with Config", 500)
-		// }
+		// reinit <- true
 	}
 	http.ServeFile(w, r, "./static/config.html")
 }
