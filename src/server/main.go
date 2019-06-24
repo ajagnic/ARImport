@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/ajagnic/ARImport/src/output"
+	"github.com/ajagnic/ARImport/src/scheduler"
 )
 
 var reinit chan bool
@@ -27,17 +28,18 @@ func contentHandler(w http.ResponseWriter, r *http.Request) {
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		_ = r.ParseForm()
-		cfg, _ := output.ReadJSON()
+		cfgP, _ := output.ReadJSON()
+		cfg := *cfgP
 
 		addr := r.FormValue("addr")
 		if addr != "" {
-			cfg.Addr = addr
+			cfg["Addr"] = addr
 		}
 		runTime := r.FormValue("runtime")
 		if runTime != "" {
-			cfg.RunTime = runTime
+			cfg["RunTime"] = runTime
 		}
-		_ = output.WriteJSON(cfg) //BUG(r): sometimes lose reference to a value.
+		_ = output.WriteJSON(cfgP)
 
 		reinit <- true
 	}
@@ -79,14 +81,10 @@ func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULER
 	reinit = make(chan bool)
 	killsched := make(chan bool)
-	// addr := scheduler.Config()
-	// go scheduler.EventListener(reinit, killsched)
+	addr := scheduler.Config()
+	go scheduler.EventListener(reinit, killsched)
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SERVER
-	// if addr == "" {
-	// 	addr = ":8001" //Default server address.
-	// }
-	addr := ":8001"
 	srv := http.Server{
 		Addr:     addr,
 		ErrorLog: output.Log,

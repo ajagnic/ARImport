@@ -13,18 +13,17 @@ import (
 var runTime time.Time
 var stopexec chan bool
 
-//Config parses config.txt and initiates runTime variable.
+//Config parses config.txt and initiates runTime variable. Returns address for the server.
 func Config() (addr string) {
 	today := time.Now()
 
-	cfg, err := output.ReadJSON()
-	addr = ""
+	cfgP, err := output.ReadJSON()
+	cfg := *cfgP
 	if err == nil {
-		rt := cfg.RunTime
+		rt := cfg["RunTime"]
 
 		hour, _ := strconv.Atoi(rt[:2])
 		min, _ := strconv.Atoi(rt[2:])
-		addr = cfg.Addr
 
 		runTime = time.Date(today.Year(), today.Month(), today.Day(), hour, min, 0, 0, today.Location())
 		//If runTime is set to early morning hours on previous day, runTime.Day will incorrect. Add 24 hours.
@@ -41,7 +40,7 @@ func Config() (addr string) {
 	stopexec = make(chan bool, 1)
 	go start()
 
-	return
+	return cfg["Addr"]
 }
 
 //EventListener waits for either re-init or kill events and calls necessary functions.
@@ -68,9 +67,16 @@ func start() {
 		//Runs timer in routine that will execute func after the duration.
 		exeTimer := time.AfterFunc(durationUntil, func() {
 			output.Log.Println("RUNNING EXEC")
-			cfg, _ := output.ReadJSON()
-			cfg.LastRun = time.Now()
-			_ = output.WriteJSON(cfg)
+
+			cfgP, err := output.ReadJSON()
+			output.Pf("start - ReadJSON: %v", err, false)
+
+			cfg := *cfgP
+			now = time.Now()
+			cfg["LastRun"] = now.Format("ANSIC")
+
+			err = output.WriteJSON(cfgP)
+			output.Pf("start - WriteJSON: %v", err, false)
 		})
 		//Listen for cancel event. (blocking call)
 		select {

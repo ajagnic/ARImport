@@ -8,13 +8,12 @@ import (
 	"io"
 	"log"
 	"os"
-	"time"
 )
 
-type config struct { //TODO: possibly change to a map[string]string and parse datetime string.
-	Addr    string
-	RunTime string
-	LastRun time.Time
+var config = map[string]string{
+	"Addr":    "127.0.0.1:8001",
+	"RunTime": "2345",
+	"LastRun": "0001-01-01T00:00:00Z",
 }
 
 var Log *log.Logger
@@ -56,23 +55,28 @@ func Close() {
 	file.Close()
 }
 
-//ReadJSON parses config.txt and returns config struct.
-func ReadJSON() (cfg config, err error) {
+//ReadJSON parses config.txt and returns config pointer.
+func ReadJSON() (cfg *map[string]string, err error) {
+	cfg = &config
+
 	file, err := os.OpenFile("./static/cfg/config.txt", os.O_RDWR, 0644)
 	if err != nil {
 		Pf("ReadJSON - Opening file: %v", err, false)
-		return cfg, err
+		return
 	}
 	defer file.Close()
 
-	fileBytes := make([]byte, 66)
+	size := 54
+	fileBytes := make([]byte, size) //BUG(r): something happening with the amount of writing/reading. Extra dupped chars end up at end.
 	b, err := file.Read(fileBytes)
 	if err != nil && err != io.EOF {
 		Pf("ReadJSON - Reading file: %v", err, false)
+	} else if b == 0 { //Config file empty, write default.
+		WriteJSON(&config)
 	}
 	fmt.Println(b)
 
-	err = json.Unmarshal(fileBytes, &cfg)
+	err = json.Unmarshal(fileBytes, cfg)
 	if err != nil {
 		Pf("ReadJSON - Unmarshal: %v", err, false)
 	}
@@ -80,16 +84,16 @@ func ReadJSON() (cfg config, err error) {
 	return
 }
 
-//WriteJSON serializes config struct to file.
-func WriteJSON(cfg config) (err error) {
+//WriteJSON serializes config map to file.
+func WriteJSON(cfg *map[string]string) (err error) {
 	file, err := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
 	if err != nil {
 		Pf("WriteJSON - Opening file: %v", err, false)
-		return err
+		return
 	}
 	defer file.Close()
 
-	bytes, err := json.Marshal(&cfg)
+	bytes, err := json.Marshal(cfg)
 	file.Write(bytes)
 
 	return

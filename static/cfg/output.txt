@@ -1,1 +1,48 @@
 
+Error: 2019/06/23 22:21:40 ReadJSON - Unmarshal: invalid character '\x00' looking for beginning of value
+Error: 2019/06/23 22:21:40 Config: invalid character '\x00' looking for beginning of value
+Error: 2019/06/23 22:22:30 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:22:30 STOPPED EXEC
+Error: 2019/06/23 22:23:32 STOPPED EXEC
+Error: 2019/06/23 22:24:00 STOPPED EXEC
+Error: 2019/06/23 22:24:24 STOPPED EXEC
+Error: 2019/06/23 22:24:43 STOPPED EXEC
+Error: 2019/06/23 22:24:58 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:24:58 Config: unexpected end of JSON input
+Error: 2019/06/23 22:24:58 STOPPED EXEC
+Error: 2019/06/23 22:25:15 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:25:15 STOPPED EXEC
+Error: 2019/06/23 22:26:00 RUNNING EXEC
+Error: 2019/06/23 22:26:21 STOPPED EXEC
+Error: 2019/06/23 22:29:00 ReadJSON - Unmarshal: invalid character 'i' after top-level value
+Error: 2019/06/23 22:29:00 Config: invalid character 'i' after top-level value
+Error: 2019/06/23 22:29:56 STOPPED EXEC
+Error: 2019/06/23 22:29:57 ReadJSON - Unmarshal: invalid character '\x00' after top-level value
+Error: 2019/06/23 22:29:57 Config: invalid character '\x00' after top-level value
+Error: 2019/06/23 22:30:30 STOPPED EXEC
+Error: 2019/06/23 22:34:00 RUNNING EXEC
+Error: 2019/06/23 22:35:24 STOPPED EXEC
+Error: 2019/06/23 22:35:24 http: Server closed
+Error: 2019/06/23 22:35:26 ReadJSON - Unmarshal: invalid character '4' after top-level value
+Error: 2019/06/23 22:35:26 Config: invalid character '4' after top-level value
+Error: 2019/06/23 22:37:19 ReadJSON - Unmarshal: invalid character '\x00' looking for beginning of value
+Error: 2019/06/23 22:37:19 Config: invalid character '\x00' looking for beginning of value
+Error: 2019/06/23 22:37:53 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:37:53 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:37:53 STOPPED EXEC
+Error: 2019/06/23 22:37:53 Config: unexpected end of JSON input
+Error: 2019/06/23 22:40:13 STOPPED EXEC
+Error: 2019/06/23 22:40:15 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:40:15 Config: unexpected end of JSON input
+Error: 2019/06/23 22:40:23 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:40:23 STOPPED EXEC
+Error: 2019/06/23 22:40:23 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:40:23 Config: unexpected end of JSON input
+Error: 2019/06/23 22:41:28 STOPPED EXEC
+Error: 2019/06/23 22:41:29 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:41:29 Config: unexpected end of JSON input
+Error: 2019/06/23 22:41:36 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:41:36 STOPPED EXEC
+Error: 2019/06/23 22:41:36 ReadJSON - Unmarshal: unexpected end of JSON input
+Error: 2019/06/23 22:41:36 Config: unexpected end of JSON input
+Error: 2019/06/23 22:41:59 STOPPED EXEC
