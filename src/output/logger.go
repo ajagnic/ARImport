@@ -5,12 +5,13 @@ package output
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"time"
 )
 
-type config struct {
+type config struct { //TODO: possibly change to a map[string]string and parse datetime string.
 	Addr    string
 	RunTime string
 	LastRun time.Time
@@ -57,21 +58,39 @@ func Close() {
 
 //ReadJSON parses config.txt and returns config struct.
 func ReadJSON() (cfg config, err error) {
-	file, _ := os.OpenFile("./static/cfg/config.txt", os.O_RDWR, 0644)
+	file, err := os.OpenFile("./static/cfg/config.txt", os.O_RDWR, 0644)
+	if err != nil {
+		Pf("ReadJSON - Opening file: %v", err, false)
+		return cfg, err
+	}
 	defer file.Close()
+
 	fileBytes := make([]byte, 66)
-	b, _ := file.Read(fileBytes)
+	b, err := file.Read(fileBytes)
+	if err != nil && err != io.EOF {
+		Pf("ReadJSON - Reading file: %v", err, false)
+	}
 	fmt.Println(b)
+
 	err = json.Unmarshal(fileBytes, &cfg)
-	fmt.Println(cfg.Addr, err)
+	if err != nil {
+		Pf("ReadJSON - Unmarshal: %v", err, false)
+	}
+
 	return
 }
 
 //WriteJSON serializes config struct to file.
 func WriteJSON(cfg config) (err error) {
-	file, _ := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
+	file, err := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
+	if err != nil {
+		Pf("WriteJSON - Opening file: %v", err, false)
+		return err
+	}
 	defer file.Close()
+
 	bytes, err := json.Marshal(&cfg)
 	file.Write(bytes)
+
 	return
 }

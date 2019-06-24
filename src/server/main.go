@@ -18,13 +18,18 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./static/index.html")
 }
 
+//contentHandler serves static files based on URL path.
+func contentHandler(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, "."+r.URL.Path)
+}
+
 //configHandler parses config form on POST, saves to local file, then re-initializes scheduler.
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		_ = r.ParseForm()
 		cfg, _ := output.ReadJSON()
 
-		addr := r.FormValue("addr") //BUG(r): sometimes lose reference to a value.
+		addr := r.FormValue("addr")
 		if addr != "" {
 			cfg.Addr = addr
 		}
@@ -32,16 +37,11 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 		if runTime != "" {
 			cfg.RunTime = runTime
 		}
-		_ = output.WriteJSON(cfg)
+		_ = output.WriteJSON(cfg) //BUG(r): sometimes lose reference to a value.
 
-		// reinit <- true
+		reinit <- true
 	}
 	http.ServeFile(w, r, "./static/config.html")
-}
-
-//contentHandler serves static files based on URL path.
-func contentHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "."+r.URL.Path)
 }
 
 //postHandler streams up form data from POST and saves to local file.
@@ -77,12 +77,15 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULER
-	// scheduler.Config()
-	// reinit = make(chan bool)
-	// killsched := make(chan bool, 1)
+	reinit = make(chan bool)
+	killsched := make(chan bool)
+	// addr := scheduler.Config()
 	// go scheduler.EventListener(reinit, killsched)
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SERVER
+	// if addr == "" {
+	// 	addr = ":8001" //Default server address.
+	// }
 	addr := ":8001"
 	srv := http.Server{
 		Addr:     addr,
@@ -107,7 +110,7 @@ func main() {
 	<-sigint
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~CLEANUP
-	// killsched <- true
+	killsched <- true
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()
