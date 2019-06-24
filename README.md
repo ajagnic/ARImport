@@ -1,5 +1,4 @@
 # ARImport
-## Getting Started
 ### Prerequisites
 *   Go == 1.12.6
 ### Build and Run
