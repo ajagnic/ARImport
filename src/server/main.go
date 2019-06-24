@@ -28,7 +28,7 @@ func contentHandler(w http.ResponseWriter, r *http.Request) {
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		_ = r.ParseForm()
-		cfgP, _ := output.ReadJSON()
+		cfgP, _ := output.ReadConfig()
 		cfg := *cfgP
 
 		addr := r.FormValue("addr")
@@ -39,7 +39,7 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 		if runTime != "" {
 			cfg["RunTime"] = runTime
 		}
-		_ = output.WriteJSON(cfgP)
+		_ = output.WriteConfig(cfgP)
 
 		reinit <- true
 	}

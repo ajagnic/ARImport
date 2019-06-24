@@ -17,23 +17,21 @@ var stopexec chan bool
 func Config() (addr string) {
 	today := time.Now()
 
-	cfgP, err := output.ReadJSON()
+	cfgP, err := output.ReadConfig()
 	cfg := *cfgP
-	if err == nil {
-		rt := cfg["RunTime"]
-
-		hour, _ := strconv.Atoi(rt[:2])
-		min, _ := strconv.Atoi(rt[2:])
-
-		runTime = time.Date(today.Year(), today.Month(), today.Day(), hour, min, 0, 0, today.Location())
-		//If runTime is set to early morning hours on previous day, runTime.Day will incorrect. Add 24 hours.
-		if hour > 0 && hour < 7 {
-			runTime.Add(24 * time.Hour)
-		}
-	} else {
-		//Config not read, default to 11:45pm.
+	if err != nil {
 		output.Pf("Config: %v", err, false)
-		runTime = time.Date(today.Year(), today.Month(), today.Day(), 23, 45, 0, 0, today.Location())
+	}
+
+	rt := cfg["RunTime"]
+
+	hour, _ := strconv.Atoi(rt[:2])
+	min, _ := strconv.Atoi(rt[2:])
+
+	runTime = time.Date(today.Year(), today.Month(), today.Day(), hour, min, 0, 0, today.Location())
+	//If runTime is set to early morning hours on previous day, runTime.Day will incorrect. Add 24 hours.
+	if hour > 0 && hour < 7 {
+		runTime.Add(24 * time.Hour)
 	}
 
 	fmt.Println(runTime)
@@ -68,15 +66,15 @@ func start() {
 		exeTimer := time.AfterFunc(durationUntil, func() {
 			output.Log.Println("RUNNING EXEC")
 
-			cfgP, err := output.ReadJSON()
-			output.Pf("start - ReadJSON: %v", err, false)
+			cfgP, err := output.ReadConfig()
+			output.Pf("start - ReadConfig: %v", err, false)
 
 			cfg := *cfgP
 			now = time.Now()
-			cfg["LastRun"] = now.Format("ANSIC")
+			cfg["LastRun"] = now.Format("ANSIC") //BUG(r): this doesnt work.
 
-			err = output.WriteJSON(cfgP)
-			output.Pf("start - WriteJSON: %v", err, false)
+			err = output.WriteConfig(cfgP)
+			output.Pf("start - WriteConfig: %v", err, false)
 		})
 		//Listen for cancel event. (blocking call)
 		select {
