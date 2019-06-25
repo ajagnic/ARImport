@@ -17,27 +17,26 @@ var stopexec chan bool
 func Config() (addr string) {
 	today := time.Now()
 
-	cfgP, err := output.ReadConfig()
+	cfgP, e1 := output.ReadConfig()
 	cfg := *cfgP
-	if err != nil {
-		output.Pf("Config: %v", err, false)
-	}
 
-	rt := cfg["RunTime"]
-
-	hour, _ := strconv.Atoi(rt[:2])
-	min, _ := strconv.Atoi(rt[2:])
+	rt := cfg["RunTime"] //format: '0000'
+	hour, e2 := strconv.Atoi(rt[:2])
+	min, e3 := strconv.Atoi(rt[2:])
 
 	runTime = time.Date(today.Year(), today.Month(), today.Day(), hour, min, 0, 0, today.Location())
-	//If runTime is set to early morning hours on previous day, runTime.Day will incorrect. Add 24 hours.
-	if hour > 0 && hour < 7 {
-		runTime.Add(24 * time.Hour)
+	//If runTime is set to early morning hours on previous day, runTime.Day will be incorrect. Add 24 hours.
+	if hour >= 0 && hour < 7 {
+		runTime.Add(2 * time.Hour)
 	}
 
-	fmt.Println(runTime)
+	fmt.Println("Scheduled Runtime: ", runTime)
+	fmt.Println("Last Run: ", cfg["LastRun"])
+
 	stopexec = make(chan bool, 1)
 	go start()
 
+	output.Check(e1, e2, e3)
 	return cfg["Addr"]
 }
 
@@ -58,20 +57,21 @@ func EventListener(reinit, kill chan bool) {
 
 func start() {
 	now := time.Now()
-
 	if now.Before(runTime) {
+
 		durationUntil := time.Until(runTime)
 		fmt.Println(durationUntil)
-		//Runs timer in routine that will execute func after the duration.
-		exeTimer := time.AfterFunc(durationUntil, func() {
-			output.Log.Println("RUNNING EXEC")
 
+		exeTimer := time.AfterFunc(durationUntil, func() {
+			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			output.Log.Println("RUNNING EXEC")
+			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			cfgP, err := output.ReadConfig()
 			output.Pf("start - ReadConfig: %v", err, false)
 
 			cfg := *cfgP
 			now = time.Now()
-			cfg["LastRun"] = now.Format("ANSIC") //BUG(r): this doesnt work.
+			cfg["LastRun"] = now.Format(time.ANSIC)
 
 			err = output.WriteConfig(cfgP)
 			output.Pf("start - WriteConfig: %v", err, false)

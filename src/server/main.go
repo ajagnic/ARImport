@@ -28,18 +28,21 @@ func contentHandler(w http.ResponseWriter, r *http.Request) {
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		_ = r.ParseForm()
+
 		cfgP, _ := output.ReadConfig()
 		cfg := *cfgP
 
 		addr := r.FormValue("addr")
-		if addr != "" {
+		if addr == "" {
 			cfg["Addr"] = addr
 		}
 		runTime := r.FormValue("runtime")
-		if runTime != "" {
+		if runTime == "" {
 			cfg["RunTime"] = runTime
 		}
+
 		_ = output.WriteConfig(cfgP)
+		// output.Check(e1, e2, e3)
 
 		reinit <- true
 	}
@@ -79,8 +82,8 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SCHEDULER
-	reinit = make(chan bool)
-	killsched := make(chan bool)
+	reinit = make(chan bool, 1)
+	killsched := make(chan bool, 1)
 	addr := scheduler.Config()
 	go scheduler.EventListener(reinit, killsched)
 
