@@ -11,7 +11,7 @@ import (
 
 var reinit chan bool
 
-func init() {
+func Run() {
 	return
 }
 
