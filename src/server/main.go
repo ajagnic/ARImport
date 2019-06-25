@@ -27,10 +27,10 @@ func contentHandler(w http.ResponseWriter, r *http.Request) {
 //configHandler parses config form on POST, saves to local file, then re-initializes scheduler.
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
-		_ = r.ParseForm()
+		e1 := r.ParseForm()
 		fmt.Println("parse")
 
-		cfg, _ := output.ReadConfig()
+		cfg, e2 := output.ReadConfig()
 		fmt.Println("read", cfg)
 
 		addr := r.FormValue("addr")
@@ -44,9 +44,9 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		fmt.Println("rt", runTime)
 
-		_ = output.WriteConfig(cfg)
+		e3 := output.WriteConfig(cfg)
 		fmt.Println("write")
-		// output.Check(e1, e2, e3)
+		output.Check(e1, e2, e3)
 
 		reinit <- true
 		fmt.Println("reinit")

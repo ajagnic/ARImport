@@ -4,7 +4,6 @@ package scheduler
 
 import (
 	"fmt"
-	"os/exec"
 	"strconv"
 	"time"
 
@@ -88,11 +87,11 @@ func start() {
 	}
 }
 
-func runBin() {
-	cmd := exec.Command("./exe/RunExternally.exe")
-	out, err := cmd.Output()
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(string(out))
-}
+// func runBin() {
+// 	cmd := exec.Command("./exe/RunExternally.exe")
+// 	out, err := cmd.Output()
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	fmt.Println(string(out))
+// }
