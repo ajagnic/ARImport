@@ -1,6 +1,18 @@
-Error: 2019/06/24 22:15:27 STOPPED EXEC
-Error: 2019/06/24 22:16:00 RUNNING EXEC
-Error: 2019/06/24 22:18:17 STOPPED EXEC
-Error: 2019/06/24 22:24:11 listen tcp :8001: bind: address already in use
-Error: 2019/06/24 22:25:06 listen tcp :8001: bind: address already in use
-Error: 2019/06/24 22:25:57 listen tcp :8001: bind: address already in use
+Error: 2019/06/24 23:14:40 STOPPED EXEC
+Error: 2019/06/24 23:14:40 ReadConfig - Unmarshal: invalid character '3' after top-level value
+Error: 2019/06/24 23:14:40 invalid character '3' after top-level value
+Error: 2019/06/24 23:15:07 ReadConfig - Unmarshal: invalid character '3' after top-level value
+Error: 2019/06/24 23:15:07 STOPPED EXEC
+Error: 2019/06/24 23:15:07 ReadConfig - Unmarshal: invalid character '3' after top-level value
+Error: 2019/06/24 23:18:26 STOPPED EXEC
+Error: 2019/06/24 23:18:26 ReadConfig - Unmarshal: invalid character '3' after top-level value
+Error: 2019/06/24 23:18:26 invalid character '3' after top-level value
+Error: 2019/06/24 23:19:31 STOPPED EXEC
+Error: 2019/06/24 23:19:31 http: Server closed
+Error: 2019/06/24 23:20:33 STOPPED EXEC
+Error: 2019/06/24 23:20:59 STOPPED EXEC
+Error: 2019/06/24 23:21:08 STOPPED EXEC
+Error: 2019/06/24 23:21:19 STOPPED EXEC
+Error: 2019/06/24 23:22:00 RUNNING EXEC
+Error: 2019/06/24 23:22:37 STOPPED EXEC
+Error: 2019/06/24 23:22:37 http: Server closed

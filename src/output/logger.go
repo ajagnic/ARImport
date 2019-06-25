@@ -56,13 +56,13 @@ func Close() {
 }
 
 //ReadConfig parses config.txt and returns config pointer.
-func ReadConfig() (cfg *map[string]string, err error) {
-	cfg = &config
+func ReadConfig() (map[string]string, error) {
+	cfg := &config
 
 	cfgBytes, err := ioutil.ReadFile("./static/cfg/config.txt")
-	if err != nil || len(cfgBytes) == 0 { //Could not read config, return default.
+	if err != nil { //Could not read config, return default.
 		Pf("ReadConfig - ReadFile: %v", err, false)
-		return
+		return config, err
 	}
 
 	err = json.Unmarshal(cfgBytes, cfg)
@@ -70,11 +70,12 @@ func ReadConfig() (cfg *map[string]string, err error) {
 		Pf("ReadConfig - Unmarshal: %v", err, false)
 	}
 
-	return
+	return config, err
 }
 
 //WriteConfig serializes config map to file.
-func WriteConfig(cfg *map[string]string) (err error) {
+func WriteConfig(cfg map[string]string) (err error) {
+	cfgP := &cfg
 	file, err := os.OpenFile("./static/cfg/config.txt", os.O_WRONLY, 0644)
 	defer file.Close()
 	if err != nil {
@@ -82,7 +83,7 @@ func WriteConfig(cfg *map[string]string) (err error) {
 		return
 	}
 
-	bytes, err := json.Marshal(cfg)
+	bytes, err := json.Marshal(cfgP)
 	file.Write(bytes)
 
 	return

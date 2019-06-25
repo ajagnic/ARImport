@@ -4,6 +4,7 @@ package scheduler
 
 import (
 	"fmt"
+	"os/exec"
 	"strconv"
 	"time"
 
@@ -14,11 +15,10 @@ var runTime time.Time
 var stopexec chan bool
 
 //Config parses config.txt and initiates runTime variable. Returns address for the server.
-func Config() (addr string) {
+func Config() string {
 	today := time.Now()
 
-	cfgP, e1 := output.ReadConfig()
-	cfg := *cfgP
+	cfg, e1 := output.ReadConfig()
 
 	rt := cfg["RunTime"] //format: '0000'
 	hour, e2 := strconv.Atoi(rt[:2])
@@ -66,14 +66,13 @@ func start() {
 			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 			output.Log.Println("RUNNING EXEC")
 			//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-			cfgP, err := output.ReadConfig()
+			cfg, err := output.ReadConfig()
 			output.Pf("start - ReadConfig: %v", err, false)
 
-			cfg := *cfgP
 			now = time.Now()
 			cfg["LastRun"] = now.Format(time.ANSIC)
 
-			err = output.WriteConfig(cfgP)
+			err = output.WriteConfig(cfg)
 			output.Pf("start - WriteConfig: %v", err, false)
 		})
 		//Listen for cancel event. (blocking call)
@@ -87,4 +86,13 @@ func start() {
 		//Either have a buffer of 1-2 hours where exec still runs, or
 		//Wait 24 hours.
 	}
+}
+
+func runBin() {
+	cmd := exec.Command("./exe/RunExternally.exe")
+	out, err := cmd.Output()
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(string(out))
 }

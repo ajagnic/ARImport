@@ -28,23 +28,28 @@ func contentHandler(w http.ResponseWriter, r *http.Request) {
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		_ = r.ParseForm()
+		fmt.Println("parse")
 
-		cfgP, _ := output.ReadConfig()
-		cfg := *cfgP
+		cfg, _ := output.ReadConfig()
+		fmt.Println("read", cfg)
 
 		addr := r.FormValue("addr")
-		if addr == "" {
+		if addr != "" {
 			cfg["Addr"] = addr
 		}
+		fmt.Println("addr", addr)
 		runTime := r.FormValue("runtime")
-		if runTime == "" {
+		if runTime != "" {
 			cfg["RunTime"] = runTime
 		}
+		fmt.Println("rt", runTime)
 
-		_ = output.WriteConfig(cfgP)
+		_ = output.WriteConfig(cfg)
+		fmt.Println("write")
 		// output.Check(e1, e2, e3)
 
 		reinit <- true
+		fmt.Println("reinit")
 	}
 	http.ServeFile(w, r, "./static/config.html")
 }
