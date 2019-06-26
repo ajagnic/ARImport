@@ -1,18 +1,42 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"os/signal"
+	"time"
 
 	"github.com/ajagnic/ARImport/src/output"
 )
 
+var srv http.Server
 var reinit chan bool
 
-func Run() {
-	return
+func Run(addr string, reinitC chan bool) {
+	reinit = reinitC
+	srv = http.Server{
+		Addr:     addr,
+		ErrorLog: output.Log,
+	}
+
+	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/static/", contentHandler)
+	http.HandleFunc("/store", postHandler)
+	http.HandleFunc("/config", configHandler)
+
+	sigint := make(chan os.Signal, 1)
+	signal.Notify(sigint, os.Interrupt)
+
+	go func() {
+		fmt.Printf("Starting server on URL/Port: %v\n", addr)
+		err := srv.ListenAndServe()
+		output.Pf("", err, true)
+	}()
+
+	<-sigint
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -83,4 +107,13 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	} else {
 		http.Error(w, "Invalid Method", 405)
 	}
+}
+
+func Shutdown() (err error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
+	defer cancel()
+	err = srv.Shutdown(ctx)
+	output.Pf("", err, true)
+	fmt.Println("Server gracefully shutdown.")
+	return
 }

@@ -26,7 +26,7 @@ func Config() string {
 	runTime = time.Date(today.Year(), today.Month(), today.Day(), hour, min, 0, 0, today.Location())
 	//If runTime is set to early morning hours on previous day, runTime.Day will be incorrect. Add 24 hours.
 	if hour >= 0 && hour < 7 {
-		runTime.Add(2 * time.Hour)
+		runTime = runTime.Add(24 * time.Hour)
 	}
 
 	fmt.Println("Scheduled Runtime: ", runTime)
@@ -44,7 +44,7 @@ func EventListener(reinit, kill chan bool) {
 	for {
 		select {
 		case <-kill:
-			fmt.Println("Stopping scheduler.")
+			fmt.Println("\nStopping scheduler.")
 			stopexec <- true
 			break
 		case <-reinit:
