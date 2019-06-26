@@ -1,3 +1,5 @@
+/*Package server contains the http server and routing for a web interface.
+ */
 package server
 
 import (
@@ -15,6 +17,7 @@ import (
 var srv http.Server
 var reinit chan bool
 
+//Run registers the handler functions and blocks until interrupt.
 func Run(addr string, reinitC chan bool) {
 	reinit = reinitC
 	srv = http.Server{
@@ -33,7 +36,7 @@ func Run(addr string, reinitC chan bool) {
 	go func() {
 		fmt.Printf("Starting server on URL/Port: %v\n", addr)
 		err := srv.ListenAndServe()
-		output.Pf("", err, true)
+		output.Pf("", err, true) //Exit
 	}()
 
 	<-sigint
@@ -52,28 +55,21 @@ func contentHandler(w http.ResponseWriter, r *http.Request) {
 func configHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		e1 := r.ParseForm()
-		fmt.Println("parse")
-
 		cfg, e2 := output.ReadConfig()
-		fmt.Println("read", cfg)
 
 		addr := r.FormValue("addr")
 		if addr != "" {
 			cfg["Addr"] = addr
 		}
-		fmt.Println("addr", addr)
 		runTime := r.FormValue("runtime")
 		if runTime != "" {
 			cfg["RunTime"] = runTime
 		}
-		fmt.Println("rt", runTime)
 
 		e3 := output.WriteConfig(cfg)
-		fmt.Println("write")
 		output.Check(e1, e2, e3)
 
 		reinit <- true
-		fmt.Println("reinit")
 	}
 	http.ServeFile(w, r, "./static/config.html")
 }
@@ -82,7 +78,7 @@ func configHandler(w http.ResponseWriter, r *http.Request) {
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		rdr, err := r.MultipartReader()
-		output.Pf("MultipartReader: %v", err, false)
+		output.Pf("postHandler - MultipartReader: %v", err, false)
 
 		if rdr != nil {
 			for { //Loop file parts until EOF and place in write buffer.
@@ -109,6 +105,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+//Shutdown calls http.Server.Shutdown with a 10ms timeout.
 func Shutdown() (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Millisecond)
 	defer cancel()

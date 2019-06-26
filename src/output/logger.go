@@ -55,7 +55,7 @@ func Close() {
 	file.Close()
 }
 
-//ReadConfig parses config.txt and returns config pointer.
+//ReadConfig parses config.txt and returns config map.
 func ReadConfig() (map[string]string, error) {
 	cfg := &config
 

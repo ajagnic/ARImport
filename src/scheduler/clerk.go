@@ -1,4 +1,4 @@
-/*Package scheduler executes binaries at a certain datetime.
+/*Package scheduler executes binaries at a scheduled datetime.
  */
 package scheduler
 
@@ -44,7 +44,7 @@ func EventListener(reinit, kill chan bool) {
 	for {
 		select {
 		case <-kill:
-			fmt.Println("\nStopping scheduler.")
+			fmt.Println("\nStopping scheduler...")
 			stopexec <- true
 			break
 		case <-reinit:
@@ -81,9 +81,15 @@ func start() {
 			exeTimer.Stop()
 		}
 	} else {
-		//time.Now after runTime:
-		//Either have a buffer of 1-2 hours where exec still runs, or
-		//Wait 24 hours.
+		//Wait 23 hours and restart.
+		waitTimer := time.AfterFunc(23*time.Hour, func() {
+			Config()
+		})
+		select {
+		case <-stopexec:
+			output.Log.Println("STOPPED WAITING")
+			waitTimer.Stop()
+		}
 	}
 }
 
